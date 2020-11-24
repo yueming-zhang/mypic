@@ -73,42 +73,22 @@ function getData(){
 
   return API
     .get('TestFastAPI', '/', myInit)
-    .then(response => {
-      // Add your code here
-      //console.log(response)
-      return response
-    })
+    .then(response => {return response})
     .catch(error => {
       console.log(error.response);
     });
 }
 
-// var ret = (async function () {
-//   var result = await getData();
-//   console.log(result)
-//   return result
-// })(); 
-
-function Welcome(props) {
-  //console.log(ret)
-  return <h1>Hello, {props.name}</h1>;
-}
-
-const element = <Welcome name="Sara" />;
-
 function App() {
   const [apiResult, setApiResult] = useState([]);
 
-  // useEffect(() => {
-  //   getApiResult();
-  // }, []);
+  useEffect(() => {
+    getApiResult();
+  }, []);
 
   async function getApiResult(){
     const ret = await getData();
-    console.log(ret.data)
-    console.log(ret.data.Hello)
-    console.log(ret['Hello'])
-    setApiResult(ret.data.Hello)
+    setApiResult(ret.data)
   }
 
   return (
@@ -126,14 +106,6 @@ function App() {
   );
 }
 
-
-// function App() {
-//   return (
-//     <Header as="h1">
-//       Hello World!    
-//     </Header>
-//   );
-// }
 
 
 export default withAuthenticator(App, {
