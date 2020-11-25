@@ -22,7 +22,7 @@ Amplify.configure({
     endpoints:[
       {
         name: "TestFastAPI",
-        endpoint: "http://cloudcmd.inmypictures.com"
+        endpoint: "https://api.inmypictures.com"
         //endpoint: "http://localhost"
       }
     ]
