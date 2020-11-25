@@ -1,31 +1,3 @@
-// import logo from './logo.svg';
-// import './App.css';
-
-// function App() {
-//   return (
-//     <div className="App">
-//       <header className="App-header">
-//         <img src={logo} className="App-logo" alt="logo" />
-//         <p>
-//           Edit <code>src/App.js</code> and save to reload.
-//         </p>
-//         <a
-//           className="App-link"
-//           href="https://reactjs.org"
-//           target="_blank"
-//           rel="noopener noreferrer"
-//         >
-//           Learn React
-//         </a>
-//       </header>
-//     </div>
-//   );
-// }
-
-// export default App;
-
-
-
 
 import React, { useState, useEffect } from 'react';
 
@@ -41,28 +13,24 @@ API.configure();
 
 Amplify.configure({
   Auth:{
-        // REQUIRED - Amazon Cognito Identity Pool ID
         identityPoolId: 'us-east-1:f3222424-fb0a-4d19-a1b1-6f373280a109',
-        // REQUIRED - Amazon Cognito Region
         region: "us-east-1",
-        // OPTIONAL - Amazon Cognito User Pool ID
         userPoolId: 'us-east-1_reFAEfASB', 
-        // OPTIONAL - Amazon Cognito Web Client ID (26-char alphanumeric string)
         userPoolWebClientId: '1l13jc7m3cce134vl66tvcm38r',
   },
   API: {
     endpoints:[
       {
         name: "TestFastAPI",
-        //endpoint: "http://cloudcmd.inmypictures.com"
-        endpoint: "http://localhost:8000"
+        endpoint: "http://cloudcmd.inmypictures.com"
+        //endpoint: "http://localhost"
       }
     ]
   }
 }
 )
 
-function getData(){
+function api_hello_word(){
   const myInit = { // OPTIONAL
       headers: {}, // OPTIONAL
       response: true, // OPTIONAL (return the entire Axios response object instead of only response.data)
@@ -79,29 +47,96 @@ function getData(){
     });
 }
 
+function api_classify_rand(){
+  const myInit = { // OPTIONAL
+      headers: {}, // OPTIONAL
+      response: true, // OPTIONAL (return the entire Axios response object instead of only response.data)
+      queryStringParameters: {  // OPTIONAL
+          //name: 'param',
+      },
+  };
+
+  return API
+    .get('TestFastAPI', '/classify_rand', myInit)
+    .then(response => {return response})
+    .catch(error => {
+      console.log(error.response);
+    });
+}
+
+
+function api_caller_name(){
+  var access_token = 'eyJraWQiOiJLYnRQQzcyeEJ5dXhmNkFwa2FvdkJwM2tHeU5TNnlxRFNoSDRyRnVxVVEwPSIsImFsZyI6IlJTMjU2In0.eyJzdWIiOiJmMzYzOGI4ZC1hOTQ3LTRmM2EtYWVmYS1lYWUzNjA1MzUyN2QiLCJldmVudF9pZCI6IjhkMzg0Mzc5LTU1NWItNGM2Ny1hYzlhLTUxYzFlMmIyODA5MiIsInRva2VuX3VzZSI6ImFjY2VzcyIsInNjb3BlIjoiYXdzLmNvZ25pdG8uc2lnbmluLnVzZXIuYWRtaW4iLCJhdXRoX3RpbWUiOjE2MDYwNzAyMDEsImlzcyI6Imh0dHBzOlwvXC9jb2duaXRvLWlkcC51cy1lYXN0LTEuYW1hem9uYXdzLmNvbVwvdXMtZWFzdC0xX09iRENOb1d3cCIsImV4cCI6MTYwNjA3MzgwMSwiaWF0IjoxNjA2MDcwMjAxLCJqdGkiOiJhNmVmMWY4Ni0wNjBjLTRmNDQtOTZmYy0yZDFkZGY3ZTU2ZGUiLCJjbGllbnRfaWQiOiI1b3J1MmJtbnM1ZTJodTdlYXYyY2Rtdmc5ciIsInVzZXJuYW1lIjoibXpoYW5nIn0.Xc7sIFrMdpvUxtwMPBhurKDUIgRaidE5XLz77gfF7nLF_HUuOqd335TVrDDgIkK8sefnz3Zqu-N2B1o1BUafuq9aEtfLooqlFBcZ2VKbR6YXE8m2Wh68aoRoxlVCNpu2v71lOsQsLYDtKBAMVbNrF98epGb7HMaL99YK5cbV5WNOvjU6P4v3zCj8wbD8IGHm-VY82yFZmdozlX1Fqhf1Ju30n7n7VQyFWklunIoH5axvALueHspi3PcB-pXrJlMG-9dhz0P4h_8Nk5T2_XSaUD6wdjZc1GzdpPUIRVe2R9mRsAD7NeQAo7NF8aSjBm0Wk_B6m4u0e2GdcsR51KrifQ'
+  var bearer_token = 'Bearer ' + access_token
+  
+  const myInit = { // OPTIONAL
+      headers: {"Authorization": bearer_token}, // OPTIONAL
+      response: true, // OPTIONAL (return the entire Axios response object instead of only response.data)
+      queryStringParameters: {  // OPTIONAL
+          //name: 'param',
+      },
+  };
+
+  return API
+    .get('TestFastAPI', '/user/test', myInit)
+    .then(response => {return response})
+    .catch(error => {
+      console.log(error.response);
+    });
+}
+
+
 function App() {
-  const [apiResult, setApiResult] = useState([]);
+  const [apiHelloWorldResult, setApiHelloWorldResult] = useState('');
+  const [apiClassifyRandResult, setApiClassifyRandResult] = useState('');
+  
 
   useEffect(() => {
-    getApiResult();
+    getApiHellowWorldResult();
   }, []);
 
-  async function getApiResult(){
-    const ret = await getData();
-    setApiResult(ret.data)
+  async function getApiHellowWorldResult(){
+    const ret = await api_hello_word();
+    setApiHelloWorldResult(ret.data)
+  }
+
+  async function getApiClassifyRandResult(){
+    const ret = await api_classify_rand();
+    const callername = await api_caller_name();
+    // console.log(callername)
+
+    // let s = this.state.apiClassifyRandResult;
+    // s['name_1'] = ret.data['name_1']
+    // s['name_2'] = ret.data['name_2']
+    // s['probability_1'] = ret.data['probability_1']
+    // s['probability_2'] = ret.data['probability_2']
+
+    // setApiClassifyRandResult({ret: s})
+    setApiClassifyRandResult('called by ' + callername.data['username'] + ' with prediction result = ' + ret.data['name_1'] + ':' + ret.data['probability_1'])
   }
 
   return (
     <div className = "App">
       <div>
-        <button className="fetch-button" onClick={getApiResult}>
-          Fetch Data
+        <button className="helloWorld-button" onClick={getApiHellowWorldResult}>
+          Call Hello World 
         </button>
       </div>
 
       <div>
-        {apiResult}
+        {apiHelloWorldResult}
       </div>
+
+
+      <div>
+        <button className="classify-button" onClick={getApiClassifyRandResult}>
+          Call Random Classification
+        </button>
+      </div>
+      <div>
+        {apiClassifyRandResult}
+      </div>
+
     </div>
   );
 }
