@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from 'react';
 
 
-import Amplify from 'aws-amplify';
+import Amplify, { Auth, auth0SignInButton } from 'aws-amplify';
 import aws_exports from './aws-exports';
 
 import { withAuthenticator } from 'aws-amplify-react';
@@ -22,8 +22,9 @@ Amplify.configure({
     endpoints:[
       {
         name: "TestFastAPI",
-        endpoint: "https://api.inmypictures.com"
+        //endpoint: "https://api.inmypictures.com"
         //endpoint: "http://localhost"
+        endpoint: "http://127.0.0.1:8000"
       }
     ]
   }
@@ -65,10 +66,13 @@ function api_classify_rand(){
 }
 
 
-function api_caller_name(){
-  var access_token = 'eyJraWQiOiJLYnRQQzcyeEJ5dXhmNkFwa2FvdkJwM2tHeU5TNnlxRFNoSDRyRnVxVVEwPSIsImFsZyI6IlJTMjU2In0.eyJzdWIiOiJmMzYzOGI4ZC1hOTQ3LTRmM2EtYWVmYS1lYWUzNjA1MzUyN2QiLCJldmVudF9pZCI6IjhkMzg0Mzc5LTU1NWItNGM2Ny1hYzlhLTUxYzFlMmIyODA5MiIsInRva2VuX3VzZSI6ImFjY2VzcyIsInNjb3BlIjoiYXdzLmNvZ25pdG8uc2lnbmluLnVzZXIuYWRtaW4iLCJhdXRoX3RpbWUiOjE2MDYwNzAyMDEsImlzcyI6Imh0dHBzOlwvXC9jb2duaXRvLWlkcC51cy1lYXN0LTEuYW1hem9uYXdzLmNvbVwvdXMtZWFzdC0xX09iRENOb1d3cCIsImV4cCI6MTYwNjA3MzgwMSwiaWF0IjoxNjA2MDcwMjAxLCJqdGkiOiJhNmVmMWY4Ni0wNjBjLTRmNDQtOTZmYy0yZDFkZGY3ZTU2ZGUiLCJjbGllbnRfaWQiOiI1b3J1MmJtbnM1ZTJodTdlYXYyY2Rtdmc5ciIsInVzZXJuYW1lIjoibXpoYW5nIn0.Xc7sIFrMdpvUxtwMPBhurKDUIgRaidE5XLz77gfF7nLF_HUuOqd335TVrDDgIkK8sefnz3Zqu-N2B1o1BUafuq9aEtfLooqlFBcZ2VKbR6YXE8m2Wh68aoRoxlVCNpu2v71lOsQsLYDtKBAMVbNrF98epGb7HMaL99YK5cbV5WNOvjU6P4v3zCj8wbD8IGHm-VY82yFZmdozlX1Fqhf1Ju30n7n7VQyFWklunIoH5axvALueHspi3PcB-pXrJlMG-9dhz0P4h_8Nk5T2_XSaUD6wdjZc1GzdpPUIRVe2R9mRsAD7NeQAo7NF8aSjBm0Wk_B6m4u0e2GdcsR51KrifQ'
-  var bearer_token = 'Bearer ' + access_token
-  
+async function api_caller_name(){
+  var t = await Auth.currentSession()
+  //console.log(t)
+
+  //var access_token = 'eyJraWQiOiJLYnRQQzcyeEJ5dXhmNkFwa2FvdkJwM2tHeU5TNnlxRFNoSDRyRnVxVVEwPSIsImFsZyI6IlJTMjU2In0.eyJzdWIiOiJmMzYzOGI4ZC1hOTQ3LTRmM2EtYWVmYS1lYWUzNjA1MzUyN2QiLCJldmVudF9pZCI6IjhkMzg0Mzc5LTU1NWItNGM2Ny1hYzlhLTUxYzFlMmIyODA5MiIsInRva2VuX3VzZSI6ImFjY2VzcyIsInNjb3BlIjoiYXdzLmNvZ25pdG8uc2lnbmluLnVzZXIuYWRtaW4iLCJhdXRoX3RpbWUiOjE2MDYwNzAyMDEsImlzcyI6Imh0dHBzOlwvXC9jb2duaXRvLWlkcC51cy1lYXN0LTEuYW1hem9uYXdzLmNvbVwvdXMtZWFzdC0xX09iRENOb1d3cCIsImV4cCI6MTYwNjA3MzgwMSwiaWF0IjoxNjA2MDcwMjAxLCJqdGkiOiJhNmVmMWY4Ni0wNjBjLTRmNDQtOTZmYy0yZDFkZGY3ZTU2ZGUiLCJjbGllbnRfaWQiOiI1b3J1MmJtbnM1ZTJodTdlYXYyY2Rtdmc5ciIsInVzZXJuYW1lIjoibXpoYW5nIn0.Xc7sIFrMdpvUxtwMPBhurKDUIgRaidE5XLz77gfF7nLF_HUuOqd335TVrDDgIkK8sefnz3Zqu-N2B1o1BUafuq9aEtfLooqlFBcZ2VKbR6YXE8m2Wh68aoRoxlVCNpu2v71lOsQsLYDtKBAMVbNrF98epGb7HMaL99YK5cbV5WNOvjU6P4v3zCj8wbD8IGHm-VY82yFZmdozlX1Fqhf1Ju30n7n7VQyFWklunIoH5axvALueHspi3PcB-pXrJlMG-9dhz0P4h_8Nk5T2_XSaUD6wdjZc1GzdpPUIRVe2R9mRsAD7NeQAo7NF8aSjBm0Wk_B6m4u0e2GdcsR51KrifQ'
+  var bearer_token = 'Bearer ' + t.getAccessToken().jwtToken
+
   const myInit = { // OPTIONAL
       headers: {"Authorization": bearer_token}, // OPTIONAL
       response: true, // OPTIONAL (return the entire Axios response object instead of only response.data)
@@ -103,6 +107,7 @@ function App() {
   async function getApiClassifyRandResult(){
     const ret = await api_classify_rand();
     const callername = await api_caller_name();
+  
     // console.log(callername)
 
     // let s = this.state.apiClassifyRandResult;
