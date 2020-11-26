@@ -22,9 +22,9 @@ Amplify.configure({
     endpoints:[
       {
         name: "TestFastAPI",
-        //endpoint: "https://api.inmypictures.com"
+        endpoint: "https://api.inmypictures.com"
         //endpoint: "http://localhost"
-        endpoint: "http://127.0.0.1:8000"
+        //endpoint: "http://127.0.0.1:8000"
       }
     ]
   }
